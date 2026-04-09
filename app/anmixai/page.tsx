@@ -19,7 +19,6 @@ import {
   CreditCard,
   BarChart3,
   Code2,
-  LogOut,
   RefreshCcw,
   ThumbsUp,
   ThumbsDown,
@@ -70,7 +69,6 @@ import {
   DropdownTrigger,
   DropdownContent,
   DropdownItem,
-  DropdownSeparator,
 } from "@/components/ui/basic-dropdown";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -1012,7 +1010,6 @@ export default function AnmixDashboard() {
   const [chatMode, setChatMode] = useState<"chat" | "image-gen" | "image-edit" | "video-gen">("chat");
   // Auth removed - always free access
   const user: any = { id: "guest", fullName: "Guest User", imageUrl: undefined };
-  const isSignedIn = true;
   const isLoaded = true;
     const router = useRouter();
   const [usageOpen, setUsageOpen] = useState(false);
@@ -1361,24 +1358,14 @@ export default function AnmixDashboard() {
             <div className="flex-1" />
 
             <div className="pb-3">
-              {user ? (
-                <Dropdown>
+              <Dropdown>
                   <DropdownTrigger className="cursor-pointer">
-                    {user?.imageUrl ? (
-                      <img
-                        src={user.imageUrl}
-                        alt={user.fullName || "Profile"}
-                        className="h-10 w-10 rounded-full border-2 border-white/20 object-cover"
-                        title={user.fullName || "Profile"}
-                      />
-                    ) : (
-                      <div
-                        className="h-10 w-10 rounded-full bg-gradient-to-br from-[#6366f1] to-[#ec4899] flex items-center justify-center text-xs font-bold text-white border border-white/20"
-                        title="Profile"
-                      >
-                        {(user?.firstName?.[0] || "A").toUpperCase()}
-                      </div>
-                    )}
+                    <div
+                      className="h-10 w-10 rounded-full bg-gradient-to-br from-[#6366f1] to-[#ec4899] flex items-center justify-center text-xs font-bold text-white border border-white/20"
+                      title="Profile"
+                    >
+                      A
+                    </div>
                   </DropdownTrigger>
                   <DropdownContent
                     align="start"
@@ -1387,12 +1374,6 @@ export default function AnmixDashboard() {
                     sideOffset={10}
                     className="w-60 bg-[#020617] border-white/10 text-white"
                   >
-                <div className="px-2 py-2 border-b border-white/10 mb-1">
-                  <p className="text-[10px] text-white/50">Signed in as</p>
-                  <p className="text-xs font-semibold truncate">
-                    {user?.emailAddresses?.[0]?.emailAddress ?? "user"}
-                  </p>
-                </div>
                 <DropdownItem
                   className="gap-2 cursor-pointer"
                   onClick={() => setProfileOpen(true)}
@@ -1421,27 +1402,8 @@ export default function AnmixDashboard() {
                   <Code2 className="h-4 w-4" />
                   API
                 </DropdownItem>
-                <DropdownSeparator />
-                <DropdownItem
-                  className="gap-2"
-                  destructive
-                  onClick={() => router.push("/")}
-                >
-                  <LogOut className="h-4 w-4" />
-                  Log out
-                </DropdownItem>
               </DropdownContent>
                 </Dropdown>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => router.push("/anmixai/sign-up")}
-                    className="h-10 w-10 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[10px] font-bold text-white/80"
-                    title="Sign up"
-                  >
-                    A
-                  </button>
-                )}
             </div>
           </div>
         ) : (
@@ -1503,26 +1465,14 @@ export default function AnmixDashboard() {
               </div>
 
               <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
-                {user ? (
                 <Dropdown>
                   <DropdownTrigger className="cursor-pointer flex items-center gap-3 w-full">
-                    {user?.imageUrl ? (
-                      <img
-                        src={user.imageUrl}
-                        alt={user.fullName || "Profile"}
-                        className="h-10 w-10 rounded-full border-2 border-white/20 object-cover"
-                      />
-                    ) : (
                       <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#6366f1] to-[#ec4899] flex items-center justify-center text-xs font-bold text-white border border-white/20">
-                        {(user?.firstName?.[0] || "A").toUpperCase()}
+                        A
                       </div>
-                    )}
                     <div className="flex flex-col text-left min-w-0">
                       <span className="text-xs font-semibold text-white truncate">
-                        {user?.fullName || "Your account"}
-                      </span>
-                      <span className="text-[10px] text-white/50 truncate">
-                        {user?.emailAddresses?.[0]?.emailAddress ?? ""}
+                        Fyoia AI
                       </span>
                     </div>
                   </DropdownTrigger>
@@ -1533,12 +1483,6 @@ export default function AnmixDashboard() {
                     sideOffset={3}
                     className="w-60 bg-[#020617] border-white/10 text-white"
                   >
-                    <div className="px-2 py-2 border-b border-white/10 mb-1">
-                      <p className="text-[10px] text-white/50">Signed in as</p>
-                      <p className="text-xs font-semibold truncate">
-                        {user?.emailAddresses?.[0]?.emailAddress ?? "user"}
-                      </p>
-                    </div>
                     <DropdownItem
                       className="gap-2 cursor-pointer"
                       onClick={() => setProfileOpen(true)}
@@ -1567,25 +1511,8 @@ export default function AnmixDashboard() {
                       <Code2 className="h-4 w-4" />
                       API
                     </DropdownItem>
-                    <DropdownSeparator />
-                    <DropdownItem
-                      className="gap-2"
-                      destructive
-                      onClick={() => router.push("/")}
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Log out
-                    </DropdownItem>
                   </DropdownContent>
                 </Dropdown>
-                ) : (
-                  <div
-                    className="w-full cursor-pointer"
-                    onClick={() => router.push("/anmixai/sign-up")}
-                  >
-                    <a href="/anmixai" className="text-xs text-white/60 hover:text-white transition-colors">Open App →</a>
-                  </div>
-                )}
               </div>
             </div>
           </>
@@ -1623,23 +1550,9 @@ export default function AnmixDashboard() {
             />
           </div>
           <div className="flex items-center gap-2 shrink-0 ml-auto absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
-            {user && !voiceMode && (
+            {!voiceMode && (
               <div className="w-7 h-7 flex items-center justify-center">
                 <VoiceButton size={22} onClick={startVoiceChatSession} />
-              </div>
-            )}
-            {!user && (
-              <div
-                className="cursor-pointer"
-                onClick={() => router.push("/anmixai/sign-up")}
-              >
-                <ShimmerButton
-                  shimmerColor="#ffffff"
-                  background="rgba(5,10,25,1)"
-                  className="px-5 py-2 text-[12px]"
-                >
-                  Sign up
-                </ShimmerButton>
               </div>
             )}
           </div>
