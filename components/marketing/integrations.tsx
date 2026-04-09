@@ -1,13 +1,13 @@
 "use client";
 
-import Wrapper from '@/components/global/wrapper';
+import type { ReactNode } from "react";
+import Wrapper from "@/components/global/wrapper";
 import { Routes } from "@/constants";
 import { useIsMobile } from "@/hooks";
-import { cn } from '@/utils';
-import { motion } from 'motion/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import { cn } from "@/utils";
+import { motion } from "motion/react";
+import Image from "next/image";
+import Link from "next/link";
 import Container from "@/components/global/container";
 import { Button } from "@/components/ui/button";
 import { Particles } from "@/components/ui/particles";
@@ -27,7 +27,7 @@ const IntegrationCard = ({
     isCenter = false,
     iconSrc
 }: {
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     isCenter?: boolean;
     iconSrc?: string;

@@ -47,38 +47,54 @@ export async function POST(req: NextRequest) {
     });
 
     const text = await upstream.text();
-    let json: any = null;
+    let json: unknown = null;
     try {
       json = text ? JSON.parse(text) : null;
     } catch {
       // ignore
     }
 
+    const parsed = json && typeof json === "object" ? json as Record<string, unknown> : null;
+
     if (!upstream.ok) {
       const errorMessage =
-        json?.error_message ||
-        json?.error ||
+        (typeof parsed?.error_message === "string" && parsed.error_message) ||
+        (typeof parsed?.error === "string" && parsed.error) ||
         "Failed to enhance image with Claid.";
       return NextResponse.json(
-        { error: errorMessage, body: json ?? text },
+        { error: errorMessage, body: parsed ?? text },
         { status: upstream.status },
       );
     }
 
-    const url =
-      json?.data?.output?.tmp_url ||
-      json?.data?.output?.object_uri ||
-      json?.data?.output?.object_key ||
-      null;
+    const output =
+      parsed &&
+      typeof parsed === "object" &&
+      parsed["data"] &&
+      typeof parsed["data"] === "object" &&
+      parsed["data"] !== null &&
+      (parsed["data"] as Record<string, unknown>)["output"] &&
+      typeof (parsed["data"] as Record<string, unknown>)["output"] === "object"
+        ? (parsed["data"] as Record<string, unknown>)["output"] as Record<string, unknown>
+        : null;
 
-    if (!url || typeof url !== "string") {
+    const outputUrl =
+      output && typeof output.tmp_url === "string"
+        ? output.tmp_url
+        : typeof output?.object_uri === "string"
+          ? output.object_uri
+          : typeof output?.object_key === "string"
+            ? output.object_key
+            : null;
+
+    if (!outputUrl) {
       return NextResponse.json(
-        { error: "Unexpected Claid response shape", body: json ?? text },
+        { error: "Unexpected Claid response shape", body: parsed ?? text },
         { status: 502 },
       );
     }
 
-    return NextResponse.json({ url });
+    return NextResponse.json({ url: outputUrl });
   } catch (err) {
     console.error("Claid enhance error:", err);
     return NextResponse.json(

@@ -40,4 +40,4 @@ export const footerLinks = {
     ]
 };
 
-export const socialLinks = [];
+export const socialLinks: { label: string; href: string; icon?: string }[] = [];

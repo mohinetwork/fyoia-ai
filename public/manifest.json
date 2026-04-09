@@ -1,0 +1,20 @@
+{
+  "name": "Fyoia AI",
+  "short_name": "Fyoia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#010104",
+  "theme_color": "#0055FF",
+  "icons": [
+    {
+      "src": "/images/fyoia-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/fyoia-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

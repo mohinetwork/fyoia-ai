@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type { ReactNode } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,17 +10,17 @@ import { ChevronDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ReasoningProps {
-  children: React.ReactNode;
+  children: ReactNode;
   isStreaming?: boolean;
 }
 
 interface ReasoningTriggerProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
 interface ReasoningContentProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 

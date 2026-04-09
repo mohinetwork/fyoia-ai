@@ -45,6 +45,7 @@ import GradientButton from "@/components/ui/gradient-button";
 import CopyButton from "@/components/ui/copy-button";
 import { Spinner } from "@/components/ui/spinner";
 import AILoader from "@/components/ui/ai-loader";
+import { CookiePanel } from "@/components/ui/cookie-banner-1";
 import {
   ResponsiveModal,
   ResponsiveModalTrigger,
@@ -244,8 +245,11 @@ export default function AnmixDashboard() {
             setIsTyping(false);
             return;
           }
-        } else if (imgPreview.url && /^https?:\/\//.test(imgPreview.url)) {
-          maybeImageUrl = imgPreview.url;
+        } else {
+          const previewUrl = imgPreview?.url ?? "";
+          if (previewUrl && /^https?:\/\//.test(previewUrl)) {
+            maybeImageUrl = previewUrl;
+          }
         }
       }
 
@@ -301,7 +305,7 @@ export default function AnmixDashboard() {
               : m,
           ),
         );
-      } catch (e) {
+      } catch (e: any) {
         const errMessage =
           e instanceof Error
             ? e.message
@@ -397,8 +401,11 @@ export default function AnmixDashboard() {
             setIsTyping(false);
             return;
           }
-        } else if (imgPreview.url && /^https?:\/\//.test(imgPreview.url)) {
-          maybeImageUrl = imgPreview.url;
+        } else {
+          const previewUrl = imgPreview?.url ?? "";
+          if (previewUrl && /^https?:\/\//.test(previewUrl)) {
+            maybeImageUrl = previewUrl;
+          }
         }
       }
       if (!maybeImageUrl && chatMode === "image-edit") {
@@ -1175,37 +1182,21 @@ export default function AnmixDashboard() {
     });
   }, [messages, activeSessionId, chatMode, voiceMode]);
 
-  // Load chat history (Supabase only if table is enabled via env; otherwise localStorage)
-  const useSupabaseChat = false; // Supabase disabled
-
+  // Load chat history from localStorage
   useEffect(() => {
-    if (!isLoaded) return;
-
-    const load = async () => {
-      // Supabase only when explicitly enabled (requires user_chats table in Supabase)
-  
-        } catch {
-          // fall back to localStorage
+    if (!isLoaded || typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem("anmix-chat-history");
+      if (stored) {
+        const parsed: ChatSession[] = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setChatHistory(parsed);
         }
       }
-
-      // Fallback: localStorage (works for guests too)
-      if (typeof window === "undefined") return;
-      try {
-        const stored = window.localStorage.getItem("anmix-chat-history");
-        if (stored) {
-          const parsed: ChatSession[] = JSON.parse(stored);
-          if (Array.isArray(parsed)) {
-            setChatHistory(parsed);
-          }
-        }
-      } catch {
-        // ignore parse errors
-      }
-    };
-
-    load();
-  }, [isLoaded, isSignedIn, user?.id, useSupabaseChat]);
+    } catch {
+      // ignore parse errors
+    }
+  }, [isLoaded]);
 
   // Load saved card from localStorage on mount
   useEffect(() => {
@@ -1223,27 +1214,13 @@ export default function AnmixDashboard() {
 
   // Persist chat history whenever it changes
   useEffect(() => {
-    if (!isLoaded) return;
-
-    // Save to Supabase only when enabled (user_chats table must exist)
-,
-            { onConflict: "user_id" }
-          );
-        } catch {
-          // ignore write errors; localStorage will still have a copy
-        }
-      })();
+    if (!isLoaded || typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem("anmix-chat-history", JSON.stringify(chatHistory));
+    } catch {
+      // ignore storage errors
     }
-
-    // Also keep a localStorage copy for fast reloads / guests
-    if (typeof window !== "undefined") {
-      try {
-        window.localStorage.setItem("anmix-chat-history", JSON.stringify(chatHistory));
-      } catch {
-        // ignore storage errors
-      }
-    }
-  }, [chatHistory, isLoaded, isSignedIn, user?.id, useSupabaseChat]);
+  }, [chatHistory, isLoaded]);
 
   return (
     <div className="min-h-screen text-foreground bg-[#010104] dark:bg-[#010104] font-sans selection:bg-[#0055FF]/30 overflow-hidden relative">
@@ -1448,7 +1425,7 @@ export default function AnmixDashboard() {
                 <DropdownItem
                   className="gap-2"
                   destructive
-                  onClick={() => signOut(() => router.push("/"))}
+                  onClick={() => router.push("/")}
                 >
                   <LogOut className="h-4 w-4" />
                   Log out
@@ -1458,7 +1435,7 @@ export default function AnmixDashboard() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => { setClerkAuthMode("signup"); setShowClerkAuthModal(true); }}
+                    onClick={() => router.push("/anmixai/sign-up")}
                     className="h-10 w-10 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[10px] font-bold text-white/80"
                     title="Sign up"
                   >
@@ -1594,7 +1571,7 @@ export default function AnmixDashboard() {
                     <DropdownItem
                       className="gap-2"
                       destructive
-                      onClick={() => signOut(() => router.push("/"))}
+                      onClick={() => router.push("/")}
                     >
                       <LogOut className="h-4 w-4" />
                       Log out
@@ -1604,7 +1581,7 @@ export default function AnmixDashboard() {
                 ) : (
                   <div
                     className="w-full cursor-pointer"
-                    onClick={() => { setClerkAuthMode("signup"); setShowClerkAuthModal(true); }}
+                    onClick={() => router.push("/anmixai/sign-up")}
                   >
                     <a href="/anmixai" className="text-xs text-white/60 hover:text-white transition-colors">Open App →</a>
                   </div>
@@ -1654,7 +1631,7 @@ export default function AnmixDashboard() {
             {!user && (
               <div
                 className="cursor-pointer"
-                onClick={() => { setClerkAuthMode("signup"); setShowClerkAuthModal(true); }}
+                onClick={() => router.push("/anmixai/sign-up")}
               >
                 <ShimmerButton
                   shimmerColor="#ffffff"
@@ -2029,7 +2006,7 @@ export default function AnmixDashboard() {
                     </motion.div>
                   );})}
 
-                  {(chatMode === "image-edit" || chatMode === "image-enhance" || chatMode === "video-gen") && pendingImagePreviews.length > 0 && (
+                  {(chatMode === "image-edit" || chatMode === "video-gen") && pendingImagePreviews.length > 0 && (
                     <motion.div
                       layout
                       initial={{ opacity: 0, y: 10 }}
@@ -2072,7 +2049,7 @@ export default function AnmixDashboard() {
                       className="flex gap-3 items-center"
                     >
                       <div className="flex items-center gap-2 mt-1 text-xs text-white/60">
-                        <Spinner variant="pinwheel" className="w-4 h-4 text-[#60a5ff]" />
+                        <Spinner className="w-4 h-4 text-[#60a5ff]" />
                         <span className="anmix-shimmer-text">Fyoia AI is thinking…</span>
                       </div>
                     </motion.div>
@@ -2114,8 +2091,6 @@ export default function AnmixDashboard() {
                       ? "Describe an image to generate"
                       : chatMode === "video-gen"
                         ? "Describe a video to generate"
-                        : chatMode === "image-enhance"
-                          ? "Describe how to enhance your image"
                         : voiceMode
                           ? "Talk to Anmix Ai"
                           : "Ask anything to anmix ai"
@@ -2124,7 +2099,7 @@ export default function AnmixDashboard() {
                  onImageMode={startImageChat}
                  mode={chatMode}
                  onPendingFilesChange={
-                  chatMode === "image-edit" || chatMode === "image-enhance" || chatMode === "video-gen"
+                  chatMode === "image-edit" || chatMode === "video-gen"
                     ? (files) =>
                         setPendingImagePreviews(
                           files.map((f: any) => ({ url: f.url, name: f.name })),

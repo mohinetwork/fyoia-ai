@@ -33,6 +33,7 @@ interface VoiceAgentClientProps {
 
 const VoiceAgentClient: React.FC<VoiceAgentClientProps> = ({ active, onConversationText }) => {
   const agentRef = useRef<DeepgramAgentElement | null>(null);
+  const AgentTag = "deepgram-agent" as any;
 
   const settingsConfig = useMemo(
     () =>
@@ -158,7 +159,7 @@ Navigation help: “Can you tell me the address or place you’re trying to reac
   }, [onConversationText]);
 
   return (
-    <deepgram-agent
+    <AgentTag
       ref={agentRef as any}
       url="wss://agent.deepgram.com/v1/agent/converse"
       auth-scheme="token"

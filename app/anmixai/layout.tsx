@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import FlareCursor from "@/components/flare-cursor";
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 export default function FyoiaAILayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <ThemeProvider

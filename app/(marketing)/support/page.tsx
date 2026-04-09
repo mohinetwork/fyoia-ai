@@ -26,7 +26,7 @@ const SupportPage = () => {
                         transition={{ duration: 0.6, delay: 0.1 }}
                         className="mt-4 text-sm md:text-base text-muted-foreground"
                     >
-                        Need help with Fyoia AI? We're here to assist you.
+                        Need help with Fyoia AI? We&apos;re here to assist you.
                     </motion.p>
                 </section>
 
@@ -112,4 +112,3 @@ const SupportPage = () => {
 };
 
 export default SupportPage;
-

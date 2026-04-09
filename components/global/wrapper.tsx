@@ -1,9 +1,9 @@
-import React from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/utils";
 
 interface Props {
     className?: string;
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 const Wrapper = ({ children, className }: Props) => {

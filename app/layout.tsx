@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { base, heading, handwriting, display } from "@/constants";
 import "@/styles/globals.css";
 import { cn, generateMetadata } from "@/utils";
@@ -11,7 +12,7 @@ export const metadata = generateMetadata();
 export default function RootLayout({
     children,
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
 }) {
     return (
         <html lang="en" suppressHydrationWarning>

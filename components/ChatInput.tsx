@@ -313,7 +313,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
             className="w-full bg-[#161C2C]/50 backdrop-blur-xl border border-white/10 rounded-3xl p-4 mb-4"
           >
             <AI_Voice 
-              apiKey={apiKey} 
               onTranscription={(text) => {
                 onChange(value + (value ? " " : "") + text);
                 setShowVoice(false);
