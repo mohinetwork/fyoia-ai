@@ -18,14 +18,32 @@ import { Separator } from "@/components/ui/separator";
 import {
   Eye,
   EyeOff,
-  Github,
   Lock,
   Mail,
   ArrowRight,
-  Chrome,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
+
+type SignInButtonProps = {
+  children: React.ReactNode;
+  mode?: "redirect" | "modal";
+  redirectUrl?: string;
+};
+
+const SignInButton = ({ children }: SignInButtonProps) => <>{children}</>;
+
+const useSignIn = () => ({
+  isLoaded: false,
+  signIn: { create: async (..._args: any[]) => ({ status: "complete", createdSessionId: "local" }) },
+  setActive: async (..._args: any[]) => {},
+});
+
+const useSignUp = () => ({
+  isLoaded: false,
+  signUp: { create: async (..._args: any[]) => ({ status: "complete", createdSessionId: "local" }) },
+  setActive: async (..._args: any[]) => {},
+});
 
 export default function LoginCardSection() {
   const [showPassword, setShowPassword] = useState(false);
@@ -416,7 +434,7 @@ export default function LoginCardSection() {
                       className="h-10 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
                       disabled={isSubmitting}
                     >
-                      <Github className="h-4 w-4 mr-2" />
+                      <ArrowRight className="h-4 w-4 mr-2" />
                       GitHub
                     </Button>
                   </SignInButton>
@@ -427,7 +445,7 @@ export default function LoginCardSection() {
                       className="h-10 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
                       disabled={isSubmitting}
                     >
-                      <Chrome className="h-4 w-4 mr-2" />
+                      <ArrowRight className="h-4 w-4 mr-2" />
                       Google
                     </Button>
                   </SignInButton>
@@ -444,4 +462,3 @@ export default function LoginCardSection() {
     </section>
   );
 }
-

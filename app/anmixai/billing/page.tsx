@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CreditCard } from "lucide-react";
 
 type BillingData = {
@@ -14,20 +14,16 @@ type BillingData = {
 const STORAGE_KEY = "anmix-billing-details";
 
 export default function BillingPage() {
-  const [data, setData] = useState<BillingData>({});
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const [data, setData] = useState<BillingData>(() => {
+    if (typeof window === "undefined") return {};
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setData(JSON.parse(stored));
-      }
+      return stored ? JSON.parse(stored) : {};
     } catch {
-      // ignore
+      return {};
     }
-  }, []);
+  });
+  const [saved, setSaved] = useState(false);
 
   const handleChange = (field: keyof BillingData, value: string) => {
     setData((prev) => ({ ...prev, [field]: value }));
@@ -122,4 +118,3 @@ export default function BillingPage() {
     </div>
   );
 }
-

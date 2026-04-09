@@ -1,10 +1,10 @@
 "use client"
 
-import type React from "react"
+import type { ReactNode } from "react"
 import { ChevronRight } from "lucide-react"
 
 interface AnimatedShinyButtonProps {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
   url?: string
 }

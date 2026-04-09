@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 120;
 
-const XIMAGINE_ENDPOINT =
-  process.env.XIMAGINE_VIDEO_ENDPOINT ||
-  "https://ximagine-2api-pro-cfwork.kines966176.workers.dev";
-const XIMAGINE_API_KEY = process.env.XIMAGINE_VIDEO_API_KEY || "sk-9661";
+const XIMAGINE_ENDPOINT = process.env.XIMAGINE_VIDEO_ENDPOINT;
+const XIMAGINE_API_KEY = process.env.XIMAGINE_VIDEO_API_KEY;
 
 function extractVideoUrl(content: string): string | null {
   const srcMatch = content.match(/src=["']?(https?:\/\/[^"'\s>]+\.mp4)[^"']*["']?/i);
@@ -75,6 +73,13 @@ async function generateVideo(prompt: string, referenceImageUrl?: string): Promis
 
 export async function POST(req: NextRequest) {
   try {
+    if (!XIMAGINE_ENDPOINT || !XIMAGINE_API_KEY) {
+      return NextResponse.json(
+        { error: "XIMAGINE_VIDEO_ENDPOINT and XIMAGINE_VIDEO_API_KEY must be configured" },
+        { status: 500 },
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
     if (!prompt) {

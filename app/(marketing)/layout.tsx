@@ -1,10 +1,11 @@
+import type { ReactNode } from "react";
 import Footer from "@/components/marketing/footer";
 import Navbar from "@/components/marketing/navbar";
 
 const MarketingLayout = ({
     children,
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
 }) => {
     return (
         <main className="w-full relative">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Settings } from "lucide-react";
 
 type SettingsData = {
@@ -11,25 +11,23 @@ type SettingsData = {
 
 const STORAGE_KEY = "anmix-settings";
 
-export default function SettingsPage() {
-  const [data, setData] = useState<SettingsData>({
-    emailNotifications: true,
-    desktopNotifications: false,
-    autoplayAnimations: true,
-  });
-  const [saved, setSaved] = useState(false);
+const DEFAULT_SETTINGS: SettingsData = {
+  emailNotifications: true,
+  desktopNotifications: false,
+  autoplayAnimations: true,
+};
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+export default function SettingsPage() {
+  const [data, setData] = useState<SettingsData>(() => {
+    if (typeof window === "undefined") return DEFAULT_SETTINGS;
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setData((prev) => ({ ...prev, ...JSON.parse(stored) }));
-      }
+      return stored ? { ...DEFAULT_SETTINGS, ...JSON.parse(stored) } : DEFAULT_SETTINGS;
     } catch {
-      // ignore
+      return DEFAULT_SETTINGS;
     }
-  }, []);
+  });
+  const [saved, setSaved] = useState(false);
 
   const toggle = (field: keyof SettingsData) => {
     setData((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -128,4 +126,3 @@ function ToggleRow({ label, description, checked, onClick }: ToggleRowProps) {
     </button>
   );
 }
-
