@@ -1472,7 +1472,7 @@ export default function AnmixDashboard() {
                       </div>
                     <div className="flex flex-col text-left min-w-0">
                       <span className="text-xs font-semibold text-white truncate">
-                        Fyoia AI
+                        Guest User
                       </span>
                     </div>
                   </DropdownTrigger>
